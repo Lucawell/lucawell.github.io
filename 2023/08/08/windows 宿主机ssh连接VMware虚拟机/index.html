@@ -1,0 +1,78 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content=""><title>windows 宿主机ssh连接VMware虚拟机 | Luca's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script src="https://www.googletagmanager.com/gtag/js?id=G-N9YN4E82GT" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-N9YN4E82GT');
+</script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script');
+  hm.src = 'https://hm.baidu.com/hm.js?' + 'c568d4df2cf5d283c6c34b3394e7c0f9';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">windows 宿主机ssh连接VMware虚拟机</h1><a id="logo" href="/.">Luca's Blog</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/tags/"><i class="fa fa-tags"> 标签</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">windows 宿主机ssh连接VMware虚拟机</h1><div class="post-meta">2023-08-08<span> | </span><span class="category"><a href="/categories/%E6%95%99%E7%A8%8B/">教程</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> 阅读</span></span></div><div class="clear"></div><div class="post-content"><h2 id="网络适配器"><a href="#网络适配器" class="headerlink" title="网络适配器"></a>网络适配器</h2><p>网络连接选择NAT模式</p>
+<p><img src="https://img-1313049298.cos.ap-shanghai.myqcloud.com/note-img/20230808212908.png" alt="image.png"></p>
+<h2 id="获取宿主机和虚拟机的ip地址"><a href="#获取宿主机和虚拟机的ip地址" class="headerlink" title="获取宿主机和虚拟机的ip地址"></a>获取宿主机和虚拟机的ip地址</h2><h3 id="宿主机："><a href="#宿主机：" class="headerlink" title="宿主机："></a>宿主机：</h3><p>在cmd输入命令：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ipconfig</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-1313049298.cos.ap-shanghai.myqcloud.com/note-img/20230808213507.png" alt="image.png"></p>
+<p>此处物理机正在使用的无线网络，所以IP地址是10.151.*** . ***</p>
+<h3 id="虚拟机："><a href="#虚拟机：" class="headerlink" title="虚拟机："></a>虚拟机：</h3><p>在虚拟机终端输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ifconfig</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-1313049298.cos.ap-shanghai.myqcloud.com/note-img/20230808213920.png" alt="image.png"></p>
+<p>此处虚拟机IP地址为：192.168.131.130</p>
+<p><strong>注意：</strong><code>ifconfig</code>如果提示不存在按提示安装即可</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install net-tools <span class="comment">#centos</span></span><br><span class="line">apt install net-tools <span class="comment">#Debian</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="虚拟机和宿主机IP映射"><a href="#虚拟机和宿主机IP映射" class="headerlink" title="虚拟机和宿主机IP映射"></a>虚拟机和宿主机IP映射</h2><p>编辑–&gt;虚拟网络编辑器:</p>
+<p>选择VMnet8,更改设置</p>
+<p><img src="https://img-1313049298.cos.ap-shanghai.myqcloud.com/note-img/20230808214747.png" alt="image.png"></p>
+<p>选择 VMnet8，点击 NAT 设置</p>
+<p><img src="https://img-1313049298.cos.ap-shanghai.myqcloud.com/note-img/20230808215026.png" alt="image.png"></p>
+<p>点击添加</p>
+<p><img src="https://img-1313049298.cos.ap-shanghai.myqcloud.com/note-img/20230808215202.png" alt="image.png"></p>
+<p>将虚拟机的IP地址和端口号填入(端口默认22)</p>
+<p><img src="https://img-1313049298.cos.ap-shanghai.myqcloud.com/note-img/20230808215322.png" alt="image.png"></p>
+<p>确定保存</p>
+<h2 id="在虚拟机安装ssh服务"><a href="#在虚拟机安装ssh服务" class="headerlink" title="在虚拟机安装ssh服务"></a>在虚拟机安装ssh服务</h2><p>openssh-client：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install openssh-client</span><br></pre></td></tr></table></figure>
+
+<p>openssh-server：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install openssh-server</span><br></pre></td></tr></table></figure>
+
+<p> 启动 ssh-server：<br> <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo /etc/init.d/ssh restart</span><br></pre></td></tr></table></figure></p>
+<p>确认 ssh-server 工作正常：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -tpl <span class="comment"># 看到 ssh 表示工作正常</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="设置服务器允许root用户ssh登录"><a href="#设置服务器允许root用户ssh登录" class="headerlink" title="设置服务器允许root用户ssh登录"></a>设置服务器允许root用户ssh登录</h2><p>完成以上步骤之后仍有可能连接不上服务器,这是因为有些系统不允许ssh使用root用户登录</p>
+<h3 id="修改-etc-ssh-sshd-config文件"><a href="#修改-etc-ssh-sshd-config文件" class="headerlink" title="修改&#x2F;etc&#x2F;ssh&#x2F;sshd_config文件"></a>修改&#x2F;etc&#x2F;ssh&#x2F;sshd_config文件</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim <span class="regexp">/etc/</span>ssh/sshd_config</span><br></pre></td></tr></table></figure>
+
+<p>设置以下两项为yes</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PermitRootLogin yes</span><br><span class="line">PasswordAuthentication yes</span><br></pre></td></tr></table></figure>
+
+<p>完成后重启服务器或者ssh即可</p>
+</div><div class="tags"><ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/" rel="tag">虚拟机</a></li></ul></div><div class="post-nav"><a class="pre" href="/2023/08/08/Git%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/">Git基本使用</a><a class="next" href="/2023/05/08/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%AE%80%E4%BB%8B/">设计模式简介</a></div><div id="container"></div><link rel="stylesheet" type="text/css" href="//unpkg.com/gitalk/dist/gitalk.css"><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script><script type="text/javascript" src="//unpkg.com/gitalk/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
+  clientID: '7712838cc608b3327b6c',
+  clientSecret: '63b48a188b96620338ea457323f367b57218c0c0',
+  repo: 'blog_comments',
+  owner: 'Lucawell',
+  admin: ['Lucawell'],
+  id: md5(location.pathname),
+  distractionFreeMode: false
+})
+gitalk.render('container')
+</script></div></div></div><script type="text/javascript" src="/js/toc.js?v=1.0.0" async></script><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar-toc"><div class="stoc-article" id="sidebar-stoc"><strong class="stoc-title"><i class="fa fa-blind"> Contents </i></strong><div class="toc-nav" id="stoc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E9%80%82%E9%85%8D%E5%99%A8"><span class="toc-number">1.</span> <span class="toc-text">网络适配器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E5%AE%BF%E4%B8%BB%E6%9C%BA%E5%92%8C%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84ip%E5%9C%B0%E5%9D%80"><span class="toc-number">2.</span> <span class="toc-text">获取宿主机和虚拟机的ip地址</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%BF%E4%B8%BB%E6%9C%BA%EF%BC%9A"><span class="toc-number">2.1.</span> <span class="toc-text">宿主机：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%EF%BC%9A"><span class="toc-number">2.2.</span> <span class="toc-text">虚拟机：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%92%8C%E5%AE%BF%E4%B8%BB%E6%9C%BAIP%E6%98%A0%E5%B0%84"><span class="toc-number">3.</span> <span class="toc-text">虚拟机和宿主机IP映射</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85ssh%E6%9C%8D%E5%8A%A1"><span class="toc-number">4.</span> <span class="toc-text">在虚拟机安装ssh服务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%81%E8%AE%B8root%E7%94%A8%E6%88%B7ssh%E7%99%BB%E5%BD%95"><span class="toc-number">5.</span> <span class="toc-text">设置服务器允许root用户ssh登录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9-etc-ssh-sshd-config%E6%96%87%E4%BB%B6"><span class="toc-number">5.1.</span> <span class="toc-text">修改&#x2F;etc&#x2F;ssh&#x2F;sshd_config文件</span></a></li></ol></li></ol></div></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2023 <a href="/." rel="nofollow">Luca's Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=1.0.0"></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/css/search.css?v=1.0.0"><script type="text/javascript" src="/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/js/copycode.js?v=1.0.0" successtext="复制成功！"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css?v=1.0.0"><script type="text/javascript" src="/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=1.0.0"></script></div></body></html>
