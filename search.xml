@@ -66,6 +66,37 @@
     
     
     <entry>
+      <title>【Pepper机器人管家（一）】项目构建</title>
+      <link href="/2023/12/11/%E3%80%90Pepper%E6%9C%BA%E5%99%A8%E4%BA%BA%E7%AE%A1%E5%AE%B6%EF%BC%88%E4%B8%80%EF%BC%89%E3%80%91%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA/"/>
+      <url>/2023/12/11/%E3%80%90Pepper%E6%9C%BA%E5%99%A8%E4%BA%BA%E7%AE%A1%E5%AE%B6%EF%BC%88%E4%B8%80%EF%BC%89%E3%80%91%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA/</url>
+      
+        <content type="html"><![CDATA[<h1 id="项目概述"><a href="#项目概述" class="headerlink" title="项目概述"></a>项目概述</h1><p>基于软银的pepper机器人，使用可视化低代码SDK软件choregraphe和web开发工具链开发一个机器人管家。考虑到的功能有提醒按时用药，健康疑难解答，康复训练教程，闹钟，跌倒检测功能(内置电话功能与邮件功能)，听歌，读报，跳舞……。</p><h1 id="项目架构"><a href="#项目架构" class="headerlink" title="项目架构"></a>项目架构</h1><p>目前考虑的的功能的实现主要分成两部分，一个是基于choregraphe的机器人模块的开发，一个是基于web开发的网站。将这两部分结合后构成一个机器人管家。<br><img src="https://img-1313049298.cos.ap-shanghai.myqcloud.com/note-img/202312101951636.png" alt="image.png"></p><h2 id="Choregraphe"><a href="#Choregraphe" class="headerlink" title="Choregraphe"></a>Choregraphe</h2><p><strong>choregraph主要承担系统的主控并实现提醒、跳舞、交流等功能</strong><br>choregraphe是一个低代码的Pepper SDK，内置很多可拖拽的功能盒子，能完成项目的绝大部分需求。其中还有python script盒子能实现一些简单的python脚本，可惜python的版本只有python 2.7，而且很多库没有内置，在是开发的一大困难之一。</p><p><img src="https://img-1313049298.cos.ap-shanghai.myqcloud.com/note-img/202312101957354.png" alt="image.png"></p><p>第二大难点是代码的调试和程序的稳定性很差，低代码的坏处就是自由度太低，而且网上的教程太少，整个项目开发只需要一份官方文档，官方文档虽然很多地方不齐全但也是比较完整。<a href="http://doc.aldebaran.com/2-4/index_dev_guide.html">官方文档</a></p><h2 id="Web开发"><a href="#Web开发" class="headerlink" title="Web开发"></a>Web开发</h2><p><strong>Web模块主要承担日程的设置、信息的推送、用户管理等功能</strong><br>web开发选用的技术栈为：flask+MySQL+jinja2的前后端不分离开发流程，页面使用原生js+html+css。没有使用前端框架并使用前后端不分离主要是机器人的平板内置的浏览器版本太低，无法兼容大部分的“重型”js框架，将页面资源在后端渲染或许是比较好的方法。工具链使用的是Pycharm+navicat+vscode，部署使用了nginx+gunicorn，部署服务器为阿里云的轻量应用服务器2核4G：Ubuntu。</p><h3 id="后端："><a href="#后端：" class="headerlink" title="后端："></a><strong>后端：</strong></h3><p>后端使用了MVC架构，用蓝图管理路由，并且创建了一些api供机器人调用，机器人与服务器主要同这些api进行通讯。</p><p><img src="https://img-1313049298.cos.ap-shanghai.myqcloud.com/note-img/202312121955641.png" alt="image.png"></p><h4 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a><strong>数据库</strong></h4><p>数据库的搭建使用了MySQL+flask-SQLAlchemy的orm框架。数据库涉及到用户的的注册和登录、用户的的日程CRUD、用户邮件的历史的保存和删除。</p><p><img src="https://img-1313049298.cos.ap-shanghai.myqcloud.com/note-img/202312102017330.png" alt="image.png"></p><h3 id="前端"><a href="#前端" class="headerlink" title="前端:"></a><strong>前端:</strong></h3><p>前端是二次开发的原生js的页面</p><p><strong>主页:</strong><br><img src="https://img-1313049298.cos.ap-shanghai.myqcloud.com/note-img/202312102038614.png" alt="image.png"></p><p><strong>日程管理:</strong><br><img src="https://img-1313049298.cos.ap-shanghai.myqcloud.com/note-img/202312102039763.png" alt="image.png"></p><p>完整的项目代码参考GitHub: <a href="https://github.com/Lucawell/flaskSchedule-pepper-MVC">https://github.com/Lucawell/flaskSchedule-pepper-MVC</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 项目 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> pepper </tag>
+            
+            <tag> python </tag>
+            
+            <tag> choregraphe </tag>
+            
+            <tag> web </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Git基本使用</title>
       <link href="/2023/08/08/Git%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/"/>
       <url>/2023/08/08/Git%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</url>
